@@ -382,29 +382,18 @@ var editImage = function(srcImageTarget) {
 
     var saveImage = function(e) {
         e.stopPropagation();
-        var type = 'png';
+
         var imgData = tmpImage.src;
-
-        var fixType = function(type) {
-            type = type.toLowerCase().replace(/jpg/i, 'jpeg');
-            var r = type.match(/png|jpeg|bmp|gif/)[0];
-            return 'image/' + r;
-        };
-
-        imgData = imgData.replace(fixType(type), 'image/octet-stream');
-        var saveFile = function(data, filename) {
-            var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-            save_link.href = data;
-            save_link.download = filename;
-
-            var event = document.createEvent('MouseEvents');
-            event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-            save_link.dispatchEvent(event);
-        };
-
+        var type = imgData.match(/png|jpg|bmp|gif/)[0];
         var filename = 'image' + (new Date()).getTime() + '.' + type;
-        saveFile(imgData, filename);
+        var link = document.createElement('a');
 
+        link.href = imgData;
+        link.download = filename;
+
+        var event = document.createEvent('MouseEvents');
+        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        link.dispatchEvent(event);
     };
 
     var changeCrop = function(e) {
