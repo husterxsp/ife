@@ -108,11 +108,19 @@ $("#nav-menu").on("drop", "li", function(e) {
     $($(target).clone()).insertAfter($(dragTarget));
     $(target).replaceWith($(dragTarget));
     setStorageMenu();
-
 });
+
 
 $("#nav-menu").on("dragover", "li", function(e) {
     e.preventDefault();
+});
+$("#nav-menu").on("mouseenter", "li", function(){
+    var top = this.offsetTop;
+    $(".nav-label").css("transform", "translate(0px,"+ top +"px)");
+});
+$("#nav-menu").on("mouseleave", "li", function(){
+    var top = $(".active")[0].offsetTop;
+    $(".nav-label").css("transform", "translate(0px,"+ top +"px)");
 });
 
 function setStorageMenu() {

@@ -80,35 +80,63 @@ i:hover {
 #newAlbum:hover {
     cursor: pointer;
 }
+.nav-menu-container {
+    position: relative;
+    background-color: #2b446b;
+}
+.nav-label {
+    position: absolute;
+    z-index: 0;
+    top: 0px;
+    height: 50px;
+    width: 100%;
+    background-color: #2d4e7c;
+
+    -webkit-transition: all ease-out 0.2s;
+    -moz-transition: all ease-out 0.2s;
+    -o-transition: all ease-out 0.2s;
+    transition: all ease-out 0.2s;
+    box-sizing: border-box;
+    border-left: 5px solid #f88953;
+}
 #nav-menu {
-    margin-bottom: 50px;
+    position: relative;
+    z-index: 1;
+    margin-left: 15px;
 }
 #nav-menu li {
-    line-height: 50px;
+    line-height: 48px;
     position: relative;
+    text-align: left;
+    text-indent: 2rem;
+    border-top: 1px solid #2d4e7c;
     box-sizing: border-box;
     width: 100%;
     height: 50px;
-    margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
     color: #93a1b5;
-    background-color: #2b446b;
+    -webkit-transition: color 0.2s;
+    -moz-transition: color 0.2s;
+    -o-transition: color 0.2s;
+    transition: color 0.2s;
+}
+#nav-menu li:nth-child(1){
+    border-top: 0;
+}
+#nav-menu li.active {
+    color: #fff;
 }
 #nav-menu li:hover {
     cursor: pointer;
-    border-left: 5px solid #f88953;
-    background-color: #2d4e7c;
-}
-#nav-menu li.active {
-    border-left: 5px solid #f88953;
-    background-color: #2d4e7c;
-}
-#show a {
-    text-decoration: none;
-    color: #93a1b5;
+    color: #fff;
 }
 
+#show a {
+    text-decoration: none;
+    color: inherit;
+}
+#show a > i {
+    text-indent: 0;
+}
 #import {
     position: relative;
     left: 820px;
