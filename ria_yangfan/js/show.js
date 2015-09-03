@@ -1,5 +1,9 @@
 init();
 
+var image = {};
+var offset = 0;
+var imageArr = [];
+
 function init() {
     $.ajax({
         type: 'GET',
@@ -8,7 +12,8 @@ function init() {
         success: function(response) {
             image = response;
             appendMenu();
-            appendImage(image.allimage);
+            imageArr = image.allimage;
+            appendImage(6);
         }
     });
 }
@@ -29,20 +34,62 @@ function appendMenu() {
     $("#show").replaceWith('<li id="manage"><a href="./manage.html">管理图片<i class="icon-link"></i></a></li>');
 }
 
-function appendImage(imageArr) {
+function appendImage(num) {
     $("#col-1, #col-2, #col-3").empty();
-    for (var i = 0; i < imageArr.length; i++) {
-        (function(i) {
-            var tmpImage = new Image();
-            tmpImage.src = imageArr[i];
-            tmpImage.className = "min";
-            $(tmpImage).load(function() {
-                var col = getShortCol();
-                col.append(tmpImage);
-            });
-        }(i));
+    if (num) {
+        while (num--) {
+            (function(i) {
+                if (imageArr[offset]) {
+                    var tmpImage = new Image();
+                    tmpImage.src = imageArr[offset];
+                    tmpImage.className = "min";
+                    $(tmpImage).load(function() {
+                        var col = getShortCol();
+                        col.append(tmpImage);
+                    });
+                    offset++;
+                }
+            }(num))
+        }
+    }
+    var colHeight = (getShortCol()).height() + (getShortCol()).offset().top;
+    if (colHeight < ($(window).scrollTop() + $(window).height())) {
+        appendSingleImage();
+        offset++;
     }
 }
+
+function appendSingleImage() {
+    if (imageArr[offset]) {
+        var tmpImage = new Image();
+        tmpImage.src = imageArr[offset];
+        tmpImage.className = "min";
+        $(tmpImage).load(function() {
+            var col = getShortCol();
+            col.append(tmpImage);
+            var colHeight = (getShortCol()).height() + (getShortCol()).offset().top;
+            if (colHeight < ($(window).scrollTop() + $(window).height())) {
+                appendSingleImage();
+                offset++;
+            }
+        });
+    } else {
+        return false;
+    }
+}
+
+$(document).scroll(function() {
+    var colHeight = (getShortCol()).height() + (getShortCol()).offset().top;
+    if (colHeight < ($(window).scrollTop() + $(window).height())) {
+        appendSingleImage();
+        offset++;
+    }
+    if ($(document).scrollTop() > 500) {
+        $(".icon-up-open-big").fadeIn();
+    } else {
+        $(".icon-up-open-big").fadeOut();
+    }
+})
 
 $("body").click(function(e) {
     var target = e.target;
@@ -57,6 +104,10 @@ $("body").click(function(e) {
         lookLeft();
     } else if (target.className == "icon-right-open-big") {
         lookRight();
+    } else if (target.className == "icon-up-open-big") {
+        $("body").animate({
+            scrollTop: 0
+        }, 500);
     }
 
 });
@@ -64,11 +115,12 @@ $("body").click(function(e) {
 $(".nav > ul").on("click", "li", function(e) {
     $(e.target).siblings().removeClass('active');
     $(e.target).addClass("active");
-    appendImage(image[e.target.id]);
+    imageArr = image[e.target.id];
+    offset = 0;
+    appendImage(6);
 });
 
 function lookLeft() {
-
     if (!$(minImage).prev()[0]) {
         if ($(minImage).parent().parent().prev()[0]) {
             minImage = $(minImage).parent().parent().prev().children(0).children().last()[0];
